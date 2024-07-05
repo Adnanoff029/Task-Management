@@ -10,7 +10,8 @@ export default {
           const user = resp.data.user
           // Add the following line:
           axios.defaults.headers.common['Authorization'] = token
-          commit('auth_success', token, user)
+          const changes = { token: token, user: user }
+          commit('auth_success', changes)
           resolve(resp)
         })
         .catch((err) => {
@@ -29,7 +30,8 @@ export default {
           const user = resp.data.user
           // Add the following line:
           axios.defaults.headers.common['Authorization'] = token
-          commit('auth_success', token, user)
+          const changes = { token: token, user: user }
+          commit('auth_success', changes)
           resolve(resp)
         })
         .catch((err) => {
@@ -39,7 +41,7 @@ export default {
     })
   },
   logout({ commit }) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       commit('logout')
       delete axios.defaults.headers.common['Authorization']
       resolve()

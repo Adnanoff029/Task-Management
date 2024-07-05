@@ -1,14 +1,15 @@
 <script setup>
 import router from '@/router'
-import { ref } from 'vue'
+import {  ref } from 'vue'
 import { useStore } from 'vuex'
 
 const store = useStore()
-// const token = computed(() => store.state.auth.token)
-// const name = computed(() => getters['auth/getName'])
 const email = ref(null)
 const password = ref(null)
-const loginUser = () => {
+// const user = computed(() => store.state.auth.user)
+// const token = computed(() => store.state.auth.token)
+
+const loginUser = async () => {
   if (!email.value || !password.value) {
     console.log('Enter email and password')
     return
@@ -17,6 +18,7 @@ const loginUser = () => {
     email: email.value,
     password: password.value
   }
+
   store
     .dispatch('auth/login', newLogin)
     .then(() => router.push('/task'))

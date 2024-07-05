@@ -1,11 +1,12 @@
-const mutations = {
+export default {
   auth_request(state) {
     state.status = 'loading'
   },
-  auth_success(state, token, user) {
+  auth_success(state, changes) {
+    // console.log(changes)
     state.status = 'success'
-    state.token = token
-    state.user = user
+    state.user = changes.user
+    state.token = changes.token
   },
   auth_error(state) {
     state.status = 'error'
@@ -16,5 +17,3 @@ const mutations = {
     state.status = ''
   }
 }
-
-export default mutations
