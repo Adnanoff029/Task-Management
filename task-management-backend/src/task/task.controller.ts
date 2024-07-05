@@ -16,8 +16,9 @@ import { TaskService } from './task.service';
 export class TaskController {
   constructor(private taskService: TaskService) {}
   @Get()
-  async getAllTasks() {
-    return this.taskService.getAllTasks();
+  @UseGuards(AuthGuard())
+  async getAllTasks(@Req() req: any) {
+    return this.taskService.getAllTasks(req.user);
   }
 
   @Post()

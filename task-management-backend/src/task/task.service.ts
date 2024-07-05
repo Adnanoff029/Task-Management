@@ -11,8 +11,8 @@ export class TaskService {
     private taskModel: Model<Task>,
   ) {}
 
-  async getAllTasks() {
-    return this.taskModel.find();
+  async getAllTasks(user: User) {
+    return this.taskModel.find({ user: user._id });
   }
 
   async createTask(task: Task, user: User) {

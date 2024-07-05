@@ -39,7 +39,7 @@ export class AuthService {
       password: hash,
     });
     const userToken = this.jwtService.sign({ id: user._id });
-    return { userToken };
+    return { userToken, user };
   }
 
   async signIn(authUserDto: AuthUserDto) {
@@ -55,6 +55,6 @@ export class AuthService {
       throw new UnauthorizedException('Wrong Password');
     }
     const token = this.jwtService.sign({ id: user._id });
-    return { token };
+    return { token, user };
   }
 }
