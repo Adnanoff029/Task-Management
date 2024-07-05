@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 export default {
   getAllTasks({ commit }, obj) {
     return new Promise((resolve, reject) => {
@@ -12,7 +11,7 @@ export default {
         })
         .then((res) => {
           const tasks = res.data
-          commit('intializeTasks', tasks)
+          commit('initializeTasks', tasks)
           resolve(res)
         })
         .catch((err) => {
@@ -39,6 +38,20 @@ export default {
         .catch((err) => {
           console.log(err)
           reject(err)
+        })
+    })
+  },
+  deleteTask({ commit }, id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .delete('http://localhost:5000/task/' + id)
+        .then((res) => {
+          commit('deleteTasks', res.data._id)
+          resolve(res)
+        })
+        .catch((error) => {
+          console.log(error)
+          reject(error)
         })
     })
   }

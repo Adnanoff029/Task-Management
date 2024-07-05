@@ -22,7 +22,6 @@ export class TaskService {
   }
 
   async deleteTask(id: string) {
-    console.log(id);
     return await this.taskModel.findByIdAndDelete(id);
   }
 }

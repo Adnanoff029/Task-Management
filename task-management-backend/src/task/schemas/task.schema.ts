@@ -6,7 +6,7 @@ import { User } from '../../auth/schemas/user.schema';
   timestamps: true,
 })
 export class Task {
-  @Prop({ required: [true, 'Description is needed'] })
+  @Prop({ required: [true, 'Title is needed'] })
   title: string;
   @Prop()
   description: string;

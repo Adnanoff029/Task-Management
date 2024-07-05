@@ -1,14 +1,15 @@
 <script setup>
-import router from '@/router'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 const title = ref('')
 const description = ref('')
 const store = useStore()
+console.log(store.getters)
 const user = computed(() => store.state.auth.user)
 const token = computed(() => store.state.auth.token)
 const isLoggedIn = computed(() => store.getters['auth/isLoggedIn'])
 const tasks = computed(() => store.state.task.tasks)
+const t = ref([])
 onMounted(() => {
   if (isLoggedIn.value) {
     const obj = {
@@ -17,11 +18,13 @@ onMounted(() => {
     }
     store
       .dispatch('task/getAllTasks', obj)
-      .then(() => {})
+      .then()
       .catch((err) => console.log(err))
   }
 })
-console.log(tasks, tasks.value)
+watch(tasks, (newTasks) => {
+  t.value = newTasks
+})
 const handleSubmit = () => {
   if (!title.value) {
     return
@@ -42,33 +45,41 @@ const handleSubmit = () => {
   title.value = ''
   description.value = ''
 }
+
+const handleDelete = (id) => {
+  store
+    .dispatch('task/deleteTask', id)
+    .then((res) => {
+      const id = res.data._id
+      t.value = t.value.filter((task) => task?._id !== id)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
 </script>
 
 <template>
-  <!-- v-if="isLoggedIn" -->
-  <div>
-    <!-- <div class="grid grid-cols-3 gap-10 my-10" :v-for="task in tasks">
-      <div class="rounded shadow-lg flex flex-col items-center" :key="task._id">
-        <div class="px-6 py-4">
-          <div class="font-bold text-center text-xl mb-2">{{ task.title }}</div>
-          <p class="text-gray-700 text-base text-center">
-            {{ task.description }}
-          </p>
-        </div>
-        <div class="w-full flex items-center justify-between">
-          <button
-            class="p-2 m-2 bg-green-600 text-white font-bold w-[100px] self-end rounded-md active:bg-green-800"
-          >
-            Done
-          </button>
+  <div v-if="isLoggedIn">
+    <div class="grid grid-cols-3 gap-10 my-10">
+      <template v-for="task in t" :key="task._id">
+        <div class="rounded shadow-lg flex flex-col items-center">
+          <div class="px-6 py-4">
+            <div class="font-bold text-center text-xl mb-2">{{ task.title }}</div>
+            <p class="text-gray-700 text-base text-center">
+              {{ task.description }}
+            </p>
+          </div>
+
           <button
             class="p-2 m-2 bg-red-600 text-white font-bold w-[100px] self-end rounded-md active:bg-red-800"
+            @click="handleDelete(task._id)"
           >
             Delete
           </button>
         </div>
-      </div>
-    </div> -->
+      </template>
+    </div>
 
     <form class="max-w-sm mx-auto" @submit.prevent="handleSubmit">
       <h1 class="text-center w-full text-2xl text-blue-600 mb-10 font-semibold">Add a new Task</h1>
@@ -103,5 +114,5 @@ const handleSubmit = () => {
       </button>
     </form>
   </div>
-  <!-- <div v-else class="w-full text-center font-bold text-3xl my-3">You Must Log In first. 😊</div> -->
+  <div v-else class="w-full text-center font-bold text-3xl my-3">You Must Log In first. 😊</div>
 </template>
