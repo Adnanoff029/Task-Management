@@ -53,6 +53,10 @@ You can see a live demo of the application [here](#).
     cd ../task-management-backend
     npm install
     ```
+4. **Configure env variables:**
+   ```bash
+    Change the process.env.DB_URL in app.module.ts from mongodb+srv://akad123:adnan@cluster0.tswcytv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+   ```
 ## Usage
 
 1. **Start the backend server:**
